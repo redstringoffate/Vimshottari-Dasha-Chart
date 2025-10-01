@@ -8,15 +8,15 @@ from utils import to_decimal, find_zodiac, find_nakshatra, generate_full_dasha
 from NAKSHATRA_TABLE import NAKSHATRAS
 
 PLANET_STYLE = {
-    "Ketu":    {"symbol": "☋"},
-    "Venus":   {"symbol": "♀"},
-    "Sun":     {"symbol": "☉"},
-    "Moon":    {"symbol": "☽"},
-    "Mars":    {"symbol": "♂"},
-    "Rahu":    {"symbol": "☊"},
-    "Jupiter": {"symbol": "♃"},
-    "Saturn":  {"symbol": "♄"},
-    "Mercury": {"symbol": "☿"},
+    "Ketu":    {"symbol": "☋", "color": "494529"},
+    "Venus":   {"symbol": "♀", "color": "BFBFBF"},
+    "Sun":     {"symbol": "☉", "color": "FF99CC"},
+    "Moon":    {"symbol": "☽", "color": "FFCCFF"},
+    "Mars":    {"symbol": "♂", "color": "FF0000"},
+    "Rahu":    {"symbol": "☊", "color": "F2F2F2"},
+    "Jupiter": {"symbol": "♃", "color": "00B050"},
+    "Saturn":  {"symbol": "♄", "color": "FFFF00"},
+    "Mercury": {"symbol": "☿", "color": "00B0F0"},
 }
 
 st.set_page_config(page_title="Vimshottari Dasha Calculator", layout="wide")
@@ -29,7 +29,7 @@ zodiac = st.selectbox("Zodiac sign", [
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
 ])
 
-degree = st.number_input("Degree (0-29)", min_value=0, max_value=29, value=15)
+degree = st.number_input("Degree (0-29)", min_value=0, max_value=29, value=0)
 minute = st.number_input("Minute (0-59)", min_value=0, max_value=59, value=0)
 
 birth_year = st.number_input("Birth year", min_value=1800, max_value=2100, value=1992)
@@ -52,11 +52,11 @@ if st.button("Calculate Dasha Chart"):
         if info["name"] == nak:
             total_minutes = (info["end"] - info["start"]) * 60
             current_minutes = (decimal - info["start"]) * 60
-            offset_minute = int(total_minutes - current_minutes)
+            offset_minutes = int(current_minutes)
             break
 
     # --- 대샤 계산 ---
-    rows = generate_full_dasha(birth_date, ruler, offset_minute)
+    rows = generate_full_dasha(birth_date, ruler, offset_minutes)
 
     # --- DataFrame 변환 ---
     df = pd.DataFrame(rows, columns=["Date", "Age", "Lv1", "Lv2", "Lv3"])
@@ -79,3 +79,4 @@ if st.button("Calculate Dasha Chart"):
             file_name=filename,
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
